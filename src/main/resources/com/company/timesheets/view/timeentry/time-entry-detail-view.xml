@@ -14,7 +14,12 @@
         <collection id="tasksDc" class="com.company.timesheets.entity.Task">
             <loader id="tasksDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from ts_Task e]]>
+                    <![CDATA[
+                select e from ts_Task e
+                where e.project.status = @enum(com.company.timesheets.entity.ProjectStatus.OPEN)
+                      and e.status = @enum(com.company.timesheets.entity.TaskStatus.ACTIVE)
+                      and (select pp from ts_ProjectParticipant pp where pp.user.username = :username) MEMBER OF e.project.participants
+                order by e.project.name asc, e.name asc]]>
                 </query>
             </loader>
             <fetchPlan extends="_base"/>
@@ -35,7 +40,7 @@
                     <icon icon="CALENDAR"/>
                 </prefix>
             </datePicker>
-            <entityPicker id="userField" property="user">
+            <entityPicker id="userField" property="user" readOnly="true">
                 <prefix>
                     <icon icon="USER"/>
                 </prefix>
@@ -72,6 +77,8 @@
                     <icon icon="EXCLAMATION_CIRCLE_O"/>
                 </prefix>
             </textArea>
+            <dateTimePicker id="lastModifiedDateField" property="lastModifiedDate"/>
+            <textField id="lastModifiedByField" property="lastModifiedBy"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseBtn" action="saveAction"/>
