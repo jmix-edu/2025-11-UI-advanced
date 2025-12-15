@@ -7,6 +7,7 @@
               title="msg://com.company.timesheets.view.mytimeentrylist/myTimeEntryListView.title"/>
         <item view="ts_Task.my" description="msg://com.company.timesheets/menu_config.ts_Task.my.description"
               title="msg://com.company.timesheets/menu_config.ts_Task.my.title"/>
+        <item view="ts_UiAsyncTasksView" title="msg://com.company.timesheets.view.uiasynctasks/uiAsyncTasksView.title"/>
     </menu>
     <menu opened="true" id="projects" description="msg://com.company.timesheets/menu_config.projects.description"
           title="msg://com.company.timesheets/menu_config.projects.title">
@@ -19,6 +20,8 @@
         <item view="ts_ProjectRole.list"
               title="msg://com.company.timesheets.view.projectrole/projectRoleListView.title"/>
         <item view="ts_TaskType.list" title="msg://com.company.timesheets.view.tasktype/taskTypeListView.title"/>
+        <item view="ts_TaskType_simple.list"
+              title="msg://com.company.timesheets.view.tasktype/taskTypeSimpleListView.title"/>
     </menu>
     <menu id="administration" title="msg://com.company.timesheets/menu.application.title">
         <item view="ts_User.list" title="msg://com.company.timesheets.view.user/UserListView.title"/>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://taskTypeSimpleListView.title"
+      focusComponent="taskTypesDataGrid">
+    <data>
+        <collection id="taskTypesDc"
+                    class="com.company.timesheets.entity.TaskType">
+            <fetchPlan extends="_base"/>
+            <loader id="taskTypesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ts_TaskType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+            <propertyFilter component="filter"/>
+        </urlQueryParameters>
+        <settings id="settings" auto="true"/>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <propertyFilter id="filter"
+                        dataLoader="taskTypesDl" property="name"
+                        operation="CONTAINS"
+                        labelVisible="false"
+                        width="100%" maxWidth="30em">
+            <textField id="filterField"
+                       placeholder="Start typing..."
+                       clearButtonVisible="true">
+                <prefix>
+                    <icon icon="SEARCH"/>
+                </prefix>
+            </textField>
+        </propertyFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <startSlot>
+                <button id="readButton" action="taskTypesDataGrid.readAction"/>
+            </startSlot>
+            <endSlot>
+                <simplePagination id="pagination" dataLoader="taskTypesDl"/>
+            </endSlot>
+        </hbox>
+        <dataGrid id="taskTypesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="taskTypesDc"
+                  columnReorderingAllowed="true"
+                  selectionMode="MULTI">
+            <actions>
+                <action id="readAction" type="list_read"/>
+            </actions>
+            <columns resizable="true">
+                <column property="name"/>
+                <column property="description"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

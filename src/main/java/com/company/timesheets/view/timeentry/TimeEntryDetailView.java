@@ -47,6 +47,8 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     public static final String PARAM_OWN_TIME_ENTRY="ownTimeEntry";
     
     private boolean ownTimeEntry = false;
+    @ViewComponent
+    private TypedDateTimePicker<OffsetDateTime> lastModifiedDateField;
 
     public void setOwnTimeEntry(boolean ownTimeEntry) {
         this.ownTimeEntry = ownTimeEntry;
