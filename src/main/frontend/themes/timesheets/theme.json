@@ -1,4 +1,4 @@
 {
-  "parent": "jmix-lumo",
+  "parent": "cobalt-theme",
   "lumoImports":["typography","color","spacing","badge","utility"]
 }

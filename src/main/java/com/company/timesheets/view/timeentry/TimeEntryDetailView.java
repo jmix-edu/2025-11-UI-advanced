@@ -1,5 +1,6 @@
 package com.company.timesheets.view.timeentry;
 
+import com.company.timesheets.app.TaskSupport;
 import com.company.timesheets.entity.Task;
 import com.company.timesheets.entity.TimeEntry;
 import com.company.timesheets.entity.TimeEntryStatus;
@@ -7,6 +8,7 @@ import com.company.timesheets.entity.User;
 import com.company.timesheets.view.main.MainView;
 import com.company.timesheets.view.task.TaskLookupView;
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.flowui.DialogWindows;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.stream.Stream;
 
 @Route(value = "time-entries/:id", layout = MainView.class)
 @ViewController("ts_TimeEntry.detail")
@@ -34,21 +37,21 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     private CurrentAuthentication currentAuthentication;
     @ViewComponent
     private JmixTextArea rejectionReasonField;
-    @ViewComponent
-    private CollectionLoader<Task> tasksDl;
 
     @ViewComponent
     private EntityComboBox<Task> tasksComboBox;
     @Autowired
     private DialogWindows dialogWindows;
     @ViewComponent
-    private EntityPicker<User> userField;
-    
-    public static final String PARAM_OWN_TIME_ENTRY="ownTimeEntry";
-    
+    private EntityComboBox<User> userField;
+
+    public static final String PARAM_OWN_TIME_ENTRY = "ownTimeEntry";
+
     private boolean ownTimeEntry = false;
     @ViewComponent
     private TypedDateTimePicker<OffsetDateTime> lastModifiedDateField;
+    @Autowired
+    private TaskSupport taskSupport;
 
     public void setOwnTimeEntry(boolean ownTimeEntry) {
         this.ownTimeEntry = ownTimeEntry;
@@ -60,9 +63,8 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
                 .getSingleParameter(PARAM_OWN_TIME_ENTRY)
                 .isPresent();
     }
-    
-    
-    
+
+
     @Subscribe("lastModifiedDateField")
     public void onLastModifiedDateFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<TypedDateTimePicker<OffsetDateTime>, OffsetDateTime> event) {
     }
@@ -70,7 +72,6 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     @Subscribe(id = "timeEntryDc", target = Target.DATA_CONTAINER)
     public void onTimeEntryDcItemChange(final InstanceContainer.ItemChangeEvent<TimeEntry> event) {
         updateRejectionReasonField();
-        loadTasks();
     }
 
     @Subscribe(id = "timeEntryDc", target = Target.DATA_CONTAINER)
@@ -81,19 +82,12 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
 
         if ("user".equals(event.getProperty())) {
             tasksComboBox.setReadOnly(getEditedEntity().getUser() == null);
-            loadTasks();
+            tasksComboBox.getDataProvider().refreshAll();
         }
 
         if ("task".equals(event.getProperty())) {
             userField.setReadOnly(getEditedEntity().getTask() != null);
         }
-
-    }
-
-    private void loadTasks() {
-    User user = getEditedEntity().getUser();
-    tasksDl.setParameter("username", user != null ? user.getUsername() : null);
-    tasksDl.load();
 
     }
 
@@ -138,5 +132,16 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
         window.getView().setUser(getEditedEntity().getUser());
         window.open();
     }
-    
+
+    @Install(to = "tasksComboBox", subject = "itemsFetchCallback")
+    private Stream<Task> tasksComboBoxItemsFetchCallback(final Query<Task, String> query) {
+        User user = getEditedEntity().getUser();
+        String filter = query.getFilter().orElse(null);
+
+        return user != null
+                ? taskSupport.getUserActiveTasks(user, query.getOffset(), query.getLimit(), filter)
+                : taskSupport.getActiveTasks(query.getOffset(), query.getLimit(), filter);
+
+    }
+
 }
