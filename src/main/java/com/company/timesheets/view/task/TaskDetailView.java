@@ -2,12 +2,12 @@ package com.company.timesheets.view.task;
 
 import com.company.timesheets.entity.Project;
 import com.company.timesheets.entity.Task;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
 import io.jmix.flowui.view.*;
 
-@Route(value = "tasks/:id", layout = MainView.class)
+@Route(value = "tasks/:id", layout = TabbedMainView.class)
 @ViewController("ts_Task.detail")
 @ViewDescriptor("task-detail-view.xml")
 @EditedEntityContainer("taskDc")

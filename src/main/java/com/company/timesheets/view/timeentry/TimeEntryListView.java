@@ -1,11 +1,11 @@
 package com.company.timesheets.view.timeentry;
 
 import com.company.timesheets.entity.TimeEntry;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.view.*;
 
-@Route(value = "time-entries", layout = MainView.class)
+@Route(value = "time-entries", layout = TabbedMainView.class)
 @ViewController("ts_TimeEntry.list")
 @ViewDescriptor("time-entry-list-view.xml")
 @LookupComponent("timeEntriesDataGrid")

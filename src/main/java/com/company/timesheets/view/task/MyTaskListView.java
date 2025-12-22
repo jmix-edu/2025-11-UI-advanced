@@ -4,7 +4,7 @@ package com.company.timesheets.view.task;
 import com.company.timesheets.entity.Task;
 import com.company.timesheets.entity.TimeEntry;
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.company.timesheets.view.timeentry.TimeEntryDetailView;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.AccessManager;
@@ -18,7 +18,7 @@ import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "my-tasks", layout = MainView.class)
+@Route(value = "my-tasks", layout = TabbedMainView.class)
 @ViewController("ts_Task.my")
 @ViewDescriptor("my-task-list-view.xml")
 @LookupComponent("tasksDataGrid")

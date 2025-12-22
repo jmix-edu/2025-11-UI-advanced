@@ -1,7 +1,7 @@
 package com.company.timesheets.view.user;
 
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
-@Route(value = "users/:id", layout = MainView.class)
+@Route(value = "users/:id", layout = TabbedMainView.class)
 @ViewController(id = "ts_User.detail")
 @ViewDescriptor(path = "user-detail-view.xml")
 @EditedEntityContainer("userDc")

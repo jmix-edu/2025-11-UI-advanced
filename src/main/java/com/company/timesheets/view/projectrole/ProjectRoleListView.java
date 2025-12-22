@@ -1,11 +1,11 @@
 package com.company.timesheets.view.projectrole;
 
 import com.company.timesheets.entity.ProjectRole;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.view.*;
 
-@Route(value = "project-roles", layout = MainView.class)
+@Route(value = "project-roles", layout = TabbedMainView.class)
 @ViewController("ts_ProjectRole.list")
 @ViewDescriptor("project-role-list-view.xml")
 @LookupComponent("projectRolesDataGrid")

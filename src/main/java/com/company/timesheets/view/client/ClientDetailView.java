@@ -1,16 +1,15 @@
 package com.company.timesheets.view.client;
 
 import com.company.timesheets.entity.Client;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.component.image.JmixImage;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.model.InstanceContainer;
 import io.jmix.flowui.view.*;
 
-@Route(value = "clients/:id", layout = MainView.class)
+@Route(value = "clients/:id", layout = TabbedMainView.class)
 @ViewController("ts_Client.detail")
 @ViewDescriptor("client-detail-view.xml")
 @EditedEntityContainer("clientDc")

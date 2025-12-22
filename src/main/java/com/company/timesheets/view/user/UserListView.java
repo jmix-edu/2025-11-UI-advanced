@@ -1,7 +1,7 @@
 package com.company.timesheets.view.user;
 
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.Dialogs;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
-@Route(value = "users", layout = MainView.class)
+@Route(value = "users", layout = TabbedMainView.class)
 @ViewController(id = "ts_User.list")
 @ViewDescriptor(path = "user-list-view.xml")
 @LookupComponent("usersDataGrid")

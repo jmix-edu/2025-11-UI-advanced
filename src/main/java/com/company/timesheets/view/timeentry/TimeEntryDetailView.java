@@ -5,29 +5,29 @@ import com.company.timesheets.entity.Task;
 import com.company.timesheets.entity.TimeEntry;
 import com.company.timesheets.entity.TimeEntryStatus;
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.main.MainView;
+import com.company.timesheets.view.tabbedmain.TabbedMainView;
 import com.company.timesheets.view.task.TaskLookupView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteParameters;
 import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.flowui.DialogWindows;
-import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.datetimepicker.TypedDateTimePicker;
 import io.jmix.flowui.component.textarea.JmixTextArea;
-import io.jmix.flowui.component.valuepicker.EntityPicker;
 import io.jmix.flowui.kit.action.ActionPerformedEvent;
-import io.jmix.flowui.model.CollectionLoader;
 import io.jmix.flowui.model.InstanceContainer;
 import io.jmix.flowui.view.*;
+import io.jmix.flowui.view.navigation.UrlParamSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-@Route(value = "time-entries/:id", layout = MainView.class)
+@Route(value = "time-entries/:id?/:ownTimeEntry?", layout = TabbedMainView.class)
 @ViewController("ts_TimeEntry.detail")
 @ViewDescriptor("time-entry-detail-view.xml")
 @EditedEntityContainer("timeEntryDc")
@@ -52,18 +52,19 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     private TypedDateTimePicker<OffsetDateTime> lastModifiedDateField;
     @Autowired
     private TaskSupport taskSupport;
+    @Autowired
+    private UrlParamSerializer urlParamSerializer;
 
     public void setOwnTimeEntry(boolean ownTimeEntry) {
         this.ownTimeEntry = ownTimeEntry;
     }
 
-    @Subscribe
-    public void onQueryParametersChange(final QueryParametersChangeEvent event) {
-        ownTimeEntry = event.getQueryParameters()
-                .getSingleParameter(PARAM_OWN_TIME_ENTRY)
-                .isPresent();
-    }
-
+// Query params can not be used in tabbed mode
+//    public void onQueryParametersChange(final QueryParametersChangeEvent event) {
+//        ownTimeEntry = event.getQueryParameters()
+//                .getSingleParameter(PARAM_OWN_TIME_ENTRY)
+//                .isPresent();
+//    }
 
     @Subscribe("lastModifiedDateField")
     public void onLastModifiedDateFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<TypedDateTimePicker<OffsetDateTime>, OffsetDateTime> event) {
@@ -144,4 +145,24 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
 
     }
 
+    @Override
+    protected void processBeforeEnterInternal(BeforeEnterEvent event) {
+        super.processBeforeEnterInternal(event);
+        setParamOwnTimeEntry(event.getRouteParameters());
+
+    }
+
+    private void setParamOwnTimeEntry(RouteParameters routeParameters) {
+        String own = routeParameters.get(PARAM_OWN_TIME_ENTRY)
+                .orElseThrow(() -> new IllegalStateException("Parameter not found"));
+
+        String decodedUsername = urlParamSerializer.deserialize(String.class, own);
+        if (decodedUsername.equals("true"))
+            setOwnTimeEntry(true);
+    }
+
+    @Override
+    protected void setupEntityToEdit() {
+        super.setupEntityToEdit();
+    }
 }
