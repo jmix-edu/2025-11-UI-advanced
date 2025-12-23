@@ -40,7 +40,7 @@
         <textField id="nameField" property="name"
                    dataContainer="clientDc"
                    label="msg://com.company.timesheets.entity/Client.name"
-                   width="100%" maxWidth="30em">
+                   width="100%" maxWidth="30em" classNames="bordered">
             <prefix>
                 <icon icon="USER_CHECK"/>
             </prefix>
@@ -51,7 +51,8 @@
         <details id="contactInformationDetails"
                  summaryText="msg://com.company.timesheets.entity/Client.contactInformation"
                  width="100%"
-                 opened="true">
+                 opened="true"
+                 themeNames="summary-filled non-collapsible bordered">
             <formLayout dataContainer="contactInformationDc">
                 <responsiveSteps>
                     <responsiveStep minWidth="0" columns="1"/>

@@ -31,7 +31,7 @@
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
             <button id="createBtn" action="clientsDataGrid.create"/>
-            <button id="editBtn" action="clientsDataGrid.edit"/>
+            <button id="editBtn" action="clientsDataGrid.edit" themeNames="primary"/>
             <button id="removeBtn" action="clientsDataGrid.remove"/>
             <simplePagination id="pagination" dataLoader="clientsDl"/>
         </hbox>
