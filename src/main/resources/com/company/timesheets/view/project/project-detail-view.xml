@@ -34,7 +34,9 @@
                     <![CDATA[select e from ts_ProjectParticipant e where e.project = :project]]>
                 </query>
             </loader>
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="role" fetchPlan="_base"/>
+            </fetchPlan>
         </collection>
     </data>
     <facets>
@@ -126,7 +128,7 @@
                                   dataContainer="participantsDc"
                                   width="100%">
                             <actions>
-                                <action id="create" type="list_create"/>
+                                <action id="create" type="list_create" />
                                 <action id="edit" type="list_edit"/>
                                 <action id="remove" type="list_remove"/>
                             </actions>
@@ -139,7 +141,7 @@
                 </tab>
             </tabSheet>
         </vbox>
-        <hbox id="detailActions" classNames="px-m py-xs bg-contrast-5">
+        <hbox id="detailActions" classNames="px-m py-xs bg-contrast-5" >
             <button id="saveAndCloseBtn" action="saveAndCloseAction"/>
             <button id="saveBtn" action="saveAction"/>
             <button id="closeBtn" action="closeAction"/>
