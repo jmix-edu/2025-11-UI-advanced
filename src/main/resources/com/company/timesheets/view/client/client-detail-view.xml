@@ -51,7 +51,7 @@
         <details id="contactInformationDetails"
                  summaryText="msg://com.company.timesheets.entity/Client.contactInformation"
                  width="100%"
-                 opened="true"
+                 opened="false"
                  themeNames="summary-filled non-collapsible bordered">
             <formLayout dataContainer="contactInformationDc">
                 <responsiveSteps>
@@ -82,6 +82,12 @@
                     </prefix>
                 </textArea>
             </formLayout>
+        </details>
+        <details id="ciDetails"
+                 summaryText="msg://com.company.timesheets.entity/Client.contactInformation"
+                 width="100%"
+                 opened="true">
+            <fragment class="com.company.timesheets.view.contactinformationfragment.ContactInformationFragment"/>
         </details>
 
         <hbox id="detailActions">

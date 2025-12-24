@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://jmix.io/schema/flowui/fragment">
+    <data>
+        <instance id="contactInformationDc"
+                  class="com.company.timesheets.entity.ContactInformation"
+                  provided="true">
+            <loader id="contactInformationDl"/>
+            <fetchPlan extends="_base"/>
+        </instance>
+    </data>
+    <content>
+        <vbox id="root">
+            <formLayout id="contactInformationForm" dataContainer="contactInformationDc">
+                <responsiveSteps>
+                    <responsiveStep minWidth="0" columns="1"/>
+                    <responsiveStep minWidth="60em" columns="3"/>
+                </responsiveSteps>
+                <emailField id="emailField" property="email">
+                    <prefix>
+                        <icon icon="ENVELOPE_O"/>
+                    </prefix>
+                </emailField>
+                <textField id="phoneField" property="phone">
+                    <prefix>
+                        <icon icon="PHONE"/>
+                    </prefix>
+                </textField>
+                <textField id="urlField" property="url">
+                    <prefix>
+                        <icon icon="LINK"/>
+                    </prefix>
+                </textField>
+                <textArea id="addressField"
+                          height="9.5em"
+                          property="address"
+                          colspan="3">
+                    <prefix>
+                        <icon icon="MAP_MARKER"/>
+                    </prefix>
+                </textArea>
+            </formLayout>
+        </vbox>
+    </content>
+</fragment>
