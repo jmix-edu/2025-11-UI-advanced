@@ -38,24 +38,6 @@ public class MyTimeEntryListView extends StandardView {
     @Autowired
     private MetadataTools metadataTools;
 
-    @Subscribe("timeEntriesDataGrid.copy")
-    public void onTimeEntriesDataGridCopy(final ActionPerformedEvent event) {
-        TimeEntry selected = timeEntriesDataGrid.getSingleSelectedItem();
-        if (selected == null) {
-            return;
-        }
-
-        TimeEntry copied = timeEntrySupport.copy(selected);
-
-        DialogWindow<TimeEntryDetailView> window = dialogWindows.detail(timeEntriesDataGrid)
-                .withViewClass(TimeEntryDetailView.class)
-                .newEntity(copied)
-                .build();
-
-        window.getView().setOwnTimeEntry(true);
-        window.open();
-    }
-
     @Install(to = "timeEntriesDataGrid.create", subject = "queryParametersProvider")
     private QueryParameters timeEntriesDataGridCreateQueryParametersProvider() {
         return QueryParameters.of(TimeEntryDetailView.PARAM_OWN_TIME_ENTRY, "");
