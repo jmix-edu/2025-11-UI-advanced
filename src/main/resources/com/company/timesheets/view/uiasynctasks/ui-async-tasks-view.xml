@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:app="http://company.com/schema/app-ui-components"
       title="msg://uiAsyncTasksView.title">
     <layout>
+        <app:slider id="slider"
+                    width="20em"
+                    minHeight="1em"
+                    min="10" max="100" value="50"/>
+
         <vbox>
             <button id="performWithoutResultBtn" text="Perform without result"/>
 

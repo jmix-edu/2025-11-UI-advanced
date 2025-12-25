@@ -3,6 +3,7 @@ package com.company.timesheets.view.uiasynctasks;
 
 import com.company.timesheets.component.ColorPicker;
 import com.company.timesheets.component.composite.ColorComponent;
+import com.company.timesheets.component.slider.Slider;
 import com.company.timesheets.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.router.Route;
@@ -91,6 +92,10 @@ public class UiAsyncTasksView extends StandardView {
         ColorComponent colorComponent = new ColorComponent();
         getContent().add(colorComponent);
     }
-    
+
+    @Subscribe("slider")
+    public void onSliderChange(Slider.SlideChangedEvent event) {
+        notifications.show("New value is: " + event.getValue());
+    }
     
 }
