@@ -4,21 +4,21 @@ package com.company.timesheets.view.task;
 import com.company.timesheets.entity.Task;
 import com.company.timesheets.entity.TimeEntry;
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.company.timesheets.view.timeentry.TimeEntryDetailView;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.AccessManager;
 import io.jmix.core.DataManager;
 import io.jmix.core.Metadata;
 import io.jmix.core.security.CurrentAuthentication;
-import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.accesscontext.UiEntityContext;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.view.*;
+import io.jmix.tabbedmode.ViewBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "my-tasks", layout = TabbedMainView.class)
+@Route(value = "my-tasks", layout = MainView.class)
 @ViewController("ts_Task.my")
 @ViewDescriptor("my-task-list-view.xml")
 @LookupComponent("tasksDataGrid")
@@ -31,12 +31,15 @@ public class MyTaskListView extends StandardListView<Task> {
     private DataManager dataManager;
     @Autowired
     private CurrentAuthentication currentAuthentication;
-    @Autowired
-    private DialogWindows dialogWindows;
+//    Tabbed mode API should be used instead - ViewBuilders
+//    @Autowired
+//    private DialogWindows dialogWindows;
     @Autowired
     private Metadata metadata;
     @Autowired
     private AccessManager accessManager;
+    @Autowired
+    private ViewBuilders viewBuilders;
 
     @Subscribe("tasksDataGrid.createTimeEntry")
     public void onTasksDataGridCreateTimeEntry(final ActionPerformedEvent event) {
@@ -49,9 +52,9 @@ public class MyTaskListView extends StandardListView<Task> {
         timeEntry.setUser((User) currentAuthentication.getUser());
         timeEntry.setTask(selectedTask);
 
-        dialogWindows.detail(this, TimeEntry.class)
+        // Pay attention - method receives 3 parameters
+        viewBuilders.detail(this, TimeEntry.class, TimeEntryDetailView.class)
                 .newEntity(timeEntry)
-                .withViewClass(TimeEntryDetailView.class)
                 .withViewConfigurer(targetView -> {
                     targetView.setOwnTimeEntry(true);
                 })

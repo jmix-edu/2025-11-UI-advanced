@@ -1,7 +1,7 @@
 package com.company.timesheets.view.uiasynctasks;
 
 
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.Notifications;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 
 import static java.lang.Thread.sleep;
 
-@Route(value = "ui-async-tasks-view", layout = TabbedMainView.class)
+@Route(value = "ui-async-tasks-view", layout = MainView.class)
 @ViewController(id = "ts_UiAsyncTasksView")
 @ViewDescriptor(path = "ui-async-tasks-view.xml")
 public class UiAsyncTasksView extends StandardView {

@@ -3,16 +3,17 @@ package com.company.timesheets.view.projectparticipant;
 import com.company.timesheets.entity.Project;
 import com.company.timesheets.entity.ProjectParticipant;
 import com.company.timesheets.entity.ProjectRole;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.vaadin.flow.router.Route;
-import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
 import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.view.*;
+import io.jmix.tabbedmode.ViewBuilders;
+import io.jmix.tabbedmode.view.ViewOpenMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "project-participants/:id", layout = TabbedMainView.class)
+@Route(value = "project-participants/:id", layout = MainView.class)
 @ViewController("ts_ProjectParticipant.detail")
 @ViewDescriptor("project-participant-detail-view.xml")
 @EditedEntityContainer("projectParticipantDc")
@@ -21,10 +22,10 @@ public class ProjectParticipantDetailView extends StandardDetailView<ProjectPart
 
     @ViewComponent
     private EntityPicker<Project> projectField;
-    @Autowired
-    private DialogWindows dialogWindows;
     @ViewComponent
     private EntityComboBox<ProjectRole> roleField;
+    @Autowired
+    private ViewBuilders viewBuilders;
 
     @Subscribe
     public void onReady(final ReadyEvent event) {
@@ -34,8 +35,9 @@ public class ProjectParticipantDetailView extends StandardDetailView<ProjectPart
 
     @Subscribe("roleField.entityCreate")
     public void onRoleFieldEntityCreate(final ActionPerformedEvent event) {
-        dialogWindows.detail(roleField)
+        viewBuilders.detail(roleField)
                 .newEntity()
+                .withOpenMode(ViewOpenMode.DIALOG)
                 .open();
     }
 }

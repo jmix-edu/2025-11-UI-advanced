@@ -12,5 +12,5 @@ import io.jmix.tabbedmode.app.main.StandardTabbedModeMainView;
 @Route(value = "tabbed-main-view")
 @ViewController(id = "ts_TabbedMainView")
 @ViewDescriptor(path = "tabbed-main-view.xml")
-public class TabbedMainView extends StandardTabbedModeMainView {
+public class MainView extends StandardTabbedModeMainView {
 }

@@ -5,15 +5,12 @@ import com.company.timesheets.entity.Task;
 import com.company.timesheets.entity.TimeEntry;
 import com.company.timesheets.entity.TimeEntryStatus;
 import com.company.timesheets.entity.User;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.company.timesheets.view.task.TaskLookupView;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteParameters;
 import io.jmix.core.security.CurrentAuthentication;
-import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.datetimepicker.TypedDateTimePicker;
 import io.jmix.flowui.component.textarea.JmixTextArea;
@@ -21,17 +18,20 @@ import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.model.InstanceContainer;
 import io.jmix.flowui.view.*;
 import io.jmix.flowui.view.navigation.UrlParamSerializer;
+import io.jmix.tabbedmode.ViewBuilders;
+import io.jmix.tabbedmode.view.MultipleOpen;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-@Route(value = "time-entries/:id?/:ownTimeEntry?", layout = TabbedMainView.class)
+@Route(value = "time-entries/:id", layout = MainView.class)
 @ViewController("ts_TimeEntry.detail")
 @ViewDescriptor("time-entry-detail-view.xml")
 @EditedEntityContainer("timeEntryDc")
 @DialogMode(width = "30em")
+@MultipleOpen
 public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     @Autowired
     private CurrentAuthentication currentAuthentication;
@@ -40,8 +40,6 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
 
     @ViewComponent
     private EntityComboBox<Task> tasksComboBox;
-    @Autowired
-    private DialogWindows dialogWindows;
     @ViewComponent
     private EntityComboBox<User> userField;
 
@@ -54,12 +52,14 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
     private TaskSupport taskSupport;
     @Autowired
     private UrlParamSerializer urlParamSerializer;
+    @Autowired
+    private ViewBuilders viewBuilders;
 
     public void setOwnTimeEntry(boolean ownTimeEntry) {
         this.ownTimeEntry = ownTimeEntry;
     }
 
-// Query params can not be used in tabbed mode
+//    Query params can not be used in tabbed mode. Route params should be avoided
 //    public void onQueryParametersChange(final QueryParametersChangeEvent event) {
 //        ownTimeEntry = event.getQueryParameters()
 //                .getSingleParameter(PARAM_OWN_TIME_ENTRY)
@@ -123,15 +123,12 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
         }
     }
 
-
     @Subscribe("tasksComboBox.entityLookup")
     public void onTasksComboBoxEntityLookup(final ActionPerformedEvent event) {
-        DialogWindow<TaskLookupView> window = dialogWindows.lookup(tasksComboBox)
-                .withViewClass(TaskLookupView.class)
-                .build();
-
-        window.getView().setUser(getEditedEntity().getUser());
-        window.open();
+        viewBuilders.lookup(tasksComboBox, TaskLookupView.class)
+                .withViewConfigurer(view ->
+                        view.setUser(getEditedEntity().getUser()))
+                .open();
     }
 
     @Install(to = "tasksComboBox", subject = "itemsFetchCallback")
@@ -143,26 +140,5 @@ public class TimeEntryDetailView extends StandardDetailView<TimeEntry> {
                 ? taskSupport.getUserActiveTasks(user, query.getOffset(), query.getLimit(), filter)
                 : taskSupport.getActiveTasks(query.getOffset(), query.getLimit(), filter);
 
-    }
-
-    @Override
-    protected void processBeforeEnterInternal(BeforeEnterEvent event) {
-        super.processBeforeEnterInternal(event);
-        setParamOwnTimeEntry(event.getRouteParameters());
-
-    }
-
-    private void setParamOwnTimeEntry(RouteParameters routeParameters) {
-        String own = routeParameters.get(PARAM_OWN_TIME_ENTRY)
-                .orElseThrow(() -> new IllegalStateException("Parameter not found"));
-
-        String decodedUsername = urlParamSerializer.deserialize(String.class, own);
-        if (decodedUsername.equals("true"))
-            setOwnTimeEntry(true);
-    }
-
-    @Override
-    protected void setupEntityToEdit() {
-        super.setupEntityToEdit();
     }
 }

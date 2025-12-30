@@ -3,10 +3,9 @@ package com.company.timesheets.view.project;
 import com.company.timesheets.entity.Project;
 import com.company.timesheets.entity.ProjectParticipant;
 import com.company.timesheets.entity.Task;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.DataManager;
-import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.tabsheet.JmixTabSheet;
@@ -15,9 +14,10 @@ import io.jmix.flowui.kit.action.BaseAction;
 import io.jmix.flowui.model.CollectionContainer;
 import io.jmix.flowui.model.CollectionLoader;
 import io.jmix.flowui.view.*;
+import io.jmix.tabbedmode.ViewBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "projects/:id", layout = TabbedMainView.class)
+@Route(value = "projects/:id", layout = MainView.class)
 @ViewController("ts_Project.detail")
 @ViewDescriptor("project-detail-view.xml")
 @EditedEntityContainer("projectDc")
@@ -26,8 +26,6 @@ public class ProjectDetailView extends StandardDetailView<Project> {
 
     @Autowired
     private DataManager dataManager;
-    @Autowired
-    private DialogWindows dialogWindows;
 
     private DataGrid<Task> tasksDataGrid;
     private DataGrid<ProjectParticipant> participantsDataGrid;
@@ -41,6 +39,8 @@ public class ProjectDetailView extends StandardDetailView<Project> {
     private CollectionLoader<Task> tasksDl;
     @ViewComponent
     private CollectionLoader<ProjectParticipant> participantsDl;
+    @Autowired
+    private ViewBuilders viewBuilders;
 
     @Subscribe("tabSheet")
     public void onTabSheetSelectedChange(final JmixTabSheet.SelectedChangeEvent event) {
@@ -85,7 +85,7 @@ public class ProjectDetailView extends StandardDetailView<Project> {
         Task newTask = dataManager.create(Task.class);
         newTask.setProject(getEditedEntity());
 
-        dialogWindows.detail(tasksDataGrid)
+        viewBuilders.detail(tasksDataGrid)
                 .newEntity(newTask)
                 .withParentDataContext(getViewData().getDataContext())
                 .open();
@@ -97,7 +97,7 @@ public class ProjectDetailView extends StandardDetailView<Project> {
             return;
         }
 
-        dialogWindows.detail(tasksDataGrid)
+        viewBuilders.detail(tasksDataGrid)
                 .editEntity(selectedItem)
                 .withParentDataContext(getViewData().getDataContext())
                 .open();
@@ -107,7 +107,7 @@ public class ProjectDetailView extends StandardDetailView<Project> {
         ProjectParticipant newParticipant = dataManager.create(ProjectParticipant.class);
         newParticipant.setProject(getEditedEntity());
 
-        dialogWindows.detail(participantsDataGrid)
+        viewBuilders.detail(participantsDataGrid)
                 .newEntity(newParticipant)
                 .withParentDataContext(getViewData().getDataContext())
                 .open();
@@ -119,7 +119,7 @@ public class ProjectDetailView extends StandardDetailView<Project> {
             return;
         }
 
-        dialogWindows.detail(participantsDataGrid)
+        viewBuilders.detail(participantsDataGrid)
                 .editEntity(selectedItem)
                 .withParentDataContext(getViewData().getDataContext())
                 .open();

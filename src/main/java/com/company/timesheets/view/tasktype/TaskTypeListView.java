@@ -1,11 +1,11 @@
 package com.company.timesheets.view.tasktype;
 
 import com.company.timesheets.entity.TaskType;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.view.*;
 
-@Route(value = "task-types", layout = TabbedMainView.class)
+@Route(value = "task-types", layout = MainView.class)
 @ViewController("ts_TaskType.list")
 @ViewDescriptor("task-type-list-view.xml")
 @LookupComponent("taskTypesDataGrid")

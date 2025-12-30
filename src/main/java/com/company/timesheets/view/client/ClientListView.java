@@ -1,14 +1,14 @@
 package com.company.timesheets.view.client;
 
 import com.company.timesheets.entity.Client;
-import com.company.timesheets.view.tabbedmain.TabbedMainView;
+import com.company.timesheets.view.tabbedmain.MainView;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.UiComponents;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "clients", layout = TabbedMainView.class)
+@Route(value = "clients", layout = MainView.class)
 @ViewController("ts_Client.list")
 @ViewDescriptor("client-list-view.xml")
 @LookupComponent("clientsDataGrid")
