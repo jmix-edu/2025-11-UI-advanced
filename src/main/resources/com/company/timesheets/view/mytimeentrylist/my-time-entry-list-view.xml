@@ -3,7 +3,7 @@
       title="msg://myTimeEntryListView.title">
     <data>
         <collection id="timeEntriesDc" class="com.company.timesheets.entity.TimeEntry">
-            <loader id="timeEntriesDl" readOnly="true">
+            <loader id="timeEntriesDl">
                 <query>
                     <![CDATA[select e from ts_TimeEntry e
                      where e.user.id = :current_user_id]]>
@@ -15,23 +15,51 @@
     <facets>
         <dataLoadCoordinator auto="true"/>
         <urlQueryParameters>
-            <genericFilter component="genericFilter"/>
             <pagination component="pagination"/>
         </urlQueryParameters>
         <timer id="timer" delay="1000" autostart="true" repeating="true"/>
         <settings auto="true"/>
     </facets>
+
     <layout>
-        <genericFilter id="genericFilter" dataLoader="timeEntriesDl">
-            <properties include=".*"/>
-        </genericFilter>
-        <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createButton" action="timeEntriesDataGrid.create"/>
-            <button id="editButton" action="timeEntriesDataGrid.edit"/>
-            <button id="removeButton" action="timeEntriesDataGrid.remove"/>
-            <button id="copyButton" action="timeEntriesDataGrid.copy"/>
+
+        <!-- Фильтры -->
+        <hbox id="filtersBox"
+              alignItems="END"
+              classNames="flex-wrap gap-m">
+
+            <propertyFilter id="taskFilter"
+                            property="task"
+                            operation="EQUAL"
+                            dataLoader="timeEntriesDl"/>
+
+            <propertyFilter id="statusFilter"
+                            property="status"
+                            operation="EQUAL"
+                            dataLoader="timeEntriesDl"/>
+
+            <!-- Кнопка быстрой очистки всех фильтров -->
+            <button id="clearFiltersBtn"
+                    text="Очистить фильтры"/>
+        </hbox>
+
+        <!-- Панель кнопок -->
+        <hbox id="buttonsPanel"
+              classNames="buttons-panel"
+              alignItems="CENTER"
+              justifyContent="BETWEEN">
+
+            <hbox classNames="gap-s">
+                <button id="createButton" action="timeEntriesDataGrid.create"/>
+                <button id="editButton" action="timeEntriesDataGrid.edit"/>
+                <button id="removeButton" action="timeEntriesDataGrid.remove"/>
+                <button id="copyButton" action="timeEntriesDataGrid.copy"/>
+            </hbox>
+
             <simplePagination id="pagination" dataLoader="timeEntriesDl"/>
         </hbox>
+
+        <!-- Таблица -->
         <dataGrid id="timeEntriesDataGrid"
                   dataContainer="timeEntriesDc"
                   width="100%"
@@ -51,8 +79,14 @@
                 <column property="task"/>
                 <column property="spentTime" autoWidth="true" flexGrow="0"/>
                 <column property="status" autoWidth="true" flexGrow="0"/>
-                <column property="description" flexGrow="2"/>
+                <column property="description" flexGrow="2" editable="true"/>
                 <column property="rejectionReason" flexGrow="2"/>
+
+                <!-- Колонка с кнопками редактора в самом конце -->
+                <editorActionsColumn>
+                    <editButton icon="PENCIL"/>
+                    <closeButton icon="CLOSE"/>
+                </editorActionsColumn>
             </columns>
         </dataGrid>
     </layout>

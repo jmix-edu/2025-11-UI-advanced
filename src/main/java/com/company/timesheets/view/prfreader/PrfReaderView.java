@@ -4,13 +4,17 @@ package com.company.timesheets.view.prfreader;
 import com.company.timesheets.view.main.MainView;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import io.jmix.core.Resources;
 import io.jmix.flowui.view.StandardView;
 import io.jmix.flowui.view.Subscribe;
 import io.jmix.flowui.view.ViewController;
 import io.jmix.flowui.view.ViewDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+
+import java.io.ByteArrayInputStream;
 
 @Route(value = "prf-reader-view", layout = MainView.class)
 @ViewController(id = "ts_PrfReaderView")
@@ -20,15 +24,24 @@ public class PrfReaderView extends StandardView {
     private Resources resources;
 
     @Subscribe
-    @SuppressWarnings({"removal"})
     public void onInit(final InitEvent event) {
         PdfViewer pdfViewer = new PdfViewer();
         pdfViewer.setSizeFull();
-        StreamResource resource = new StreamResource("example.pdf", () ->
-                resources.getResourceAsStream("META-INF/resources/files/example.pdf"));
-        pdfViewer.setSrc(resource);
 
+        Resource resource = resources.getResource("META-INF/resources/files/example.pdf");
+
+        // It should be checked, if resource does exist and it is readable
+        DownloadHandler handler = DownloadHandler.fromInputStream(downloadEvent ->
+                new DownloadResponse(
+                        new ByteArrayInputStream(resource.getContentAsByteArray()),
+                        "example.pdf",
+                        "application/octet-stream",
+                        resource.contentLength()
+                )
+        );
+
+        pdfViewer.setSrc(handler);
         getContent().add(pdfViewer);
     }
-    
+
 }

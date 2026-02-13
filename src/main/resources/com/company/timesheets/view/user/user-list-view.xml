@@ -68,6 +68,7 @@
                 <column property="firstName"/>
                 <column property="lastName"/>
                 <column property="email"/>
+                <column property="document"/>
                 <column property="timeZoneId"/>
                 <column property="active"/>
             </columns>

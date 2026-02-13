@@ -1,14 +1,46 @@
-/* Define your styles here */
+/* Основные настройки темы: палитра, похожая на Haulmont/Jmix */
+html {
+    /* Основной корпоративный синий */
+    --lumo-primary-color: rgb(0, 85, 166);
+    --lumo-primary-color-50pct: rgba(0, 85, 166, 0.5);
+    --lumo-primary-color-10pct: rgba(0, 85, 166, 0.1);
+    --lumo-primary-text-color: rgb(0, 85, 166);
+
+    /* Базовый фон и цвет текста */
+    --lumo-base-color: #ffffff;
+    --lumo-body-text-color: #1a1a1a;
+
+    /* Немного скорректируем контраст */
+    --lumo-contrast-5pct: rgba(26, 26, 26, 0.05);
+    --lumo-contrast-10pct: rgba(26, 26, 26, 0.10);
+    --lumo-contrast-20pct: rgba(26, 26, 26, 0.20);
+}
+
+/* Подключение стилей представлений */
 @import url('view/main-view.css');
 @import url('view/main-view-top-menu.css');
 @import url('view/login-view.css');
 
-
+/* Кнопки и меню-кнопки: базовый стиль */
 vaadin-button:not([theme~="tertiary"]),
 vaadin-menu-bar[jmix-role~="jmix-dropdown-button"] > vaadin-menu-bar-button,
 vaadin-menu-bar[jmix-role*="jmix-combo-button"] > vaadin-menu-bar-button {
     background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-shade-5pct));
     outline: 1px solid var(--lumo-contrast-20pct);
+}
+
+/* Кнопки и меню-кнопки: красная тень снизу при hover / focus */
+vaadin-button:not([theme~="tertiary"]):hover,
+vaadin-button:not([theme~="tertiary"]):focus-visible,
+vaadin-menu-bar[jmix-role~="jmix-dropdown-button"] > vaadin-menu-bar-button:hover,
+vaadin-menu-bar[jmix-role~="jmix-dropdown-button"] > vaadin-menu-bar-button:focus-visible,
+vaadin-menu-bar[jmix-role*="jmix-combo-button"] > vaadin-menu-bar-button:hover,
+vaadin-menu-bar[jmix-role*="jmix-combo-button"] > vaadin-menu-bar-button:focus-visible {
+    /* Ровная красная «полоса» снизу
+    box-shadow: 0 3px 0 0 red;
+    */
+    box-shadow: 0 3px 4px -2px rgba(255, 0, 0, 0.8);
+
 }
 
 /* Non-collapsible */
@@ -48,10 +80,14 @@ vaadin-details-summary[theme~='bordered'] {
     padding: var(--lumo-space-s) calc(var(--lumo-space-s) + var(--lumo-space-xs) / 2);
 }
 
+/* Login form */
+
 jmix-login-form vaadin-login-form-wrapper {
     border-radius: var(--lumo-border-radius-m);
     box-shadow: var(--lumo-box-shadow-s);
 }
+
+/* Проекты в гриде по статусу */
 
 vaadin-grid::part(opened-project) {
     color: var(--lumo-success-text-color);
@@ -61,6 +97,26 @@ vaadin-grid::part(closed-project) {
     color: var(--lumo-error-text-color);
 }
 
+/* Нижняя панель */
+
 .footer-panel {
     background-color: var(--lumo-contrast-5pct);
+}
+
+.card {
+    padding: var(--lumo-space-m);
+    box-sizing: border-box;
+    border-radius: var(--lumo-border-radius-m);
+    box-shadow: var(--lumo-box-shadow-s);
+    background-color: var(--lumo-base-color);
+
+    /* важно: растянуть содержимое карточки на всю высоту ячейки */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cards-grid {
+    /* фиксируем одинаковую высоту строк */
+    grid-auto-rows: 1fr;
 }

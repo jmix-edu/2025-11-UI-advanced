@@ -12,7 +12,7 @@
                               classNames="jmix-main-view-drawer-toggle"
                               themeNames="contrast"
                               ariaLabel="msg://drawerToggle.ariaLabel"/>
-                <h1 id="viewTitle" classNames="jmix-main-view-title"/>
+                <h1 id="viewTitle" classNames="jmix-main-view-title" width="100%"/>
 
 <!--                <component class="com.company.timesheets.component.themetoggle.ThemeToggle"/>-->
 

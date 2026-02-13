@@ -27,9 +27,11 @@ import io.jmix.core.MessageTools;
 import io.jmix.core.Messages;
 import io.jmix.core.accesscontext.InMemoryCrudEntityContext;
 import io.jmix.core.metamodel.model.MetaClass;
+import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.UiComponents;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.accesscontext.UiEntityContext;
+import io.jmix.flowui.component.image.JmixImage;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.model.CollectionContainer;
 import io.jmix.flowui.util.RemoveOperation;
@@ -70,6 +72,8 @@ public class ClientListView extends StandardView {
     private RemoveOperation removeOperation;
 
     private InMemoryCrudEntityContext crudEntityContext;
+    @Autowired
+    private DialogWindows dialogWindows;
 
 
     @Subscribe
@@ -200,7 +204,8 @@ public class ClientListView extends StandardView {
 
         Button editBtn = createEditButton(client);
         Button removeBtn = createRemoveButton(client);
-        actionsBox.add(editBtn, removeBtn);
+        Button readBtn = createViewButton(client);
+        actionsBox.add(editBtn, removeBtn, readBtn);
         return actionsBox;
     }
 
@@ -225,6 +230,27 @@ public class ClientListView extends StandardView {
         button.setVisible(deletePermitted(client));
 
         return button;
+    }
+
+    private Button createViewButton(Client client) {
+        Button button = uiComponents.create(Button.class);
+        button.setTooltipText(messages.getMessage("actions.Read"));
+        button.setIcon(VaadinIcon.EYE.create());
+
+        button.addClickListener(event -> viewClient(client));
+
+        return button;
+    }
+    private void viewClient(Client client) {
+        DialogWindow<ClientDetailView> window = dialogWindows
+                .detail(this, Client.class)
+                .withViewClass(ClientDetailView.class)
+                .editEntity(client)
+                .build();
+
+        window.getView().setReadOnly(true);
+
+        window.open();
     }
 
     private boolean editPermitted(Client client) {

@@ -59,6 +59,9 @@
                 <column property="project"/>
                 <column property="name"/>
                 <column property="type"/>
+                <column property="startedAt"/>
+                <column property="plannedEffort"/>
+                <column property="expectedCompletionDate"/>
                 <column property="description" flexGrow="2"/>
             </columns>
         </dataGrid>

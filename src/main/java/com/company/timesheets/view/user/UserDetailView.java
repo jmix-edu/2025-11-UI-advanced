@@ -2,18 +2,27 @@ package com.company.timesheets.view.user;
 
 import com.company.timesheets.entity.User;
 import com.company.timesheets.view.main.MainView;
+import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
 import io.jmix.core.EntityStates;
+import io.jmix.core.FileRef;
+import io.jmix.core.FileStorage;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -43,10 +52,49 @@ public class UserDetailView extends StandardDetailView<User> {
     private PasswordEncoder passwordEncoder;
 
     private boolean newEntity;
+    @ViewComponent
+    private Div documentFrame;
+    @Autowired
+    private FileStorage fileStorage;
 
     @Subscribe
     public void onInit(final InitEvent event) {
         timeZoneField.setItems(List.of(TimeZone.getAvailableIDs()));
+    }
+
+    private void addFileToPdfViewer() {
+        User user = getEditedEntity();
+        FileRef file = user.getDocument();
+        if (file != null) {
+
+            // Вариант 1: Использование FileDescriptor
+            PdfViewer pdfViewer = new PdfViewer();
+
+            // Получаем информацию о файле
+            DownloadHandler handler = getHandler(file);
+
+            pdfViewer.setSrc(handler);
+            pdfViewer.openThumbnailsView();
+            pdfViewer.setHeight("100%");
+            documentFrame.add(pdfViewer);
+            documentFrame.setVisible(true);
+        }
+    }
+
+    private DownloadHandler getHandler(FileRef file) {
+        long fileSize = file.getParameters().size();
+        String fileName = file.getFileName();
+
+        return DownloadHandler.fromInputStream(downloadEvent -> {
+            InputStream newStream = fileStorage.openStream(file);
+
+            return new DownloadResponse(
+                    newStream,
+                    fileName,
+                    "application/pdf",
+                    fileSize
+            );
+        });
     }
 
     @Subscribe
@@ -61,6 +109,7 @@ public class UserDetailView extends StandardDetailView<User> {
         if (entityStates.isNew(getEditedEntity())) {
             usernameField.focus();
         }
+        addFileToPdfViewer();
     }
 
     @Subscribe

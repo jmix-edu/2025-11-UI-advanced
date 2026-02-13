@@ -71,4 +71,8 @@ public class TaskSupport {
                 participantCondition
         );
     }
+
+    public Task createTask() {
+        return new Task();
+    }
 }

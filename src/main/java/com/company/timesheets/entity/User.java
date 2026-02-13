@@ -1,5 +1,6 @@
 package com.company.timesheets.entity;
 
+import io.jmix.core.FileRef;
 import io.jmix.core.HasTimeZone;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
@@ -12,6 +13,7 @@ import io.jmix.core.metamodel.annotation.JmixEntity;
 import io.jmix.security.authentication.JmixUserDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import org.locationtech.jts.geom.Point;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.OffsetDateTime;
@@ -67,8 +69,41 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
+    @Column(name = "WORKSPACE_LOCATION")
+    private Point workspaceLocation;
+
+    @Column(name = "AVATAR", length = 1024)
+    private FileRef avatar;
+
+    @Column(name = "DOCUMENT", length = 1024)
+    private FileRef document;
+
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
+
+    public FileRef getDocument() {
+        return document;
+    }
+
+    public void setDocument(FileRef document) {
+        this.document = document;
+    }
+
+    public FileRef getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(FileRef avatar) {
+        this.avatar = avatar;
+    }
+
+    public Point getWorkspaceLocation() {
+        return workspaceLocation;
+    }
+
+    public void setWorkspaceLocation(Point workspaceLocation) {
+        this.workspaceLocation = workspaceLocation;
+    }
 
     public OffsetDateTime getDeletedDate() {
         return deletedDate;

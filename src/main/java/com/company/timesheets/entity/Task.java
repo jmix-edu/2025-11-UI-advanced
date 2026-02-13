@@ -7,6 +7,7 @@ import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.annotation.JmixProperty;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +60,28 @@ public class Task {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    @Column(name = "STARTED_AT")
+    private OffsetDateTime startedAt;
+
+    @Column(name = "PLANNED_EFFORT")
+    private java.math.BigDecimal plannedEffort;
+
+    public OffsetDateTime getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(OffsetDateTime startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public java.math.BigDecimal getPlannedEffort() {
+        return plannedEffort;
+    }
+
+    public void setPlannedEffort(java.math.BigDecimal plannedEffort) {
+        this.plannedEffort = plannedEffort;
+    }
 
     public TaskStatus getStatus() {
         return status == null ? null : TaskStatus.fromId(status);
@@ -143,6 +166,16 @@ public class Task {
     @PostConstruct
     public void postConstruct() {
         setStatus(TaskStatus.ACTIVE);
+    }
+
+    @JmixProperty
+    @DependsOnProperties({"startedAt", "plannedEffort"})
+    public OffsetDateTime getExpectedCompletionDate() {
+        if (startedAt == null || plannedEffort == null) {
+            return null;
+        }
+        long hours = plannedEffort.longValue();
+        return startedAt.plusHours(hours);
     }
 
 }

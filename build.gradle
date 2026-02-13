@@ -1,5 +1,5 @@
 plugins {
-    id 'io.jmix' version '2.7.1'
+    id 'io.jmix' version '2.7.3'
     id 'java'
     id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.9'
 }
@@ -8,7 +8,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'com.vaadin'
 
 jmix {
-    bomVersion = '2.7.1'
+    bomVersion = '2.7.3'
     projectId = 'ts'
 }
 
@@ -17,17 +17,28 @@ version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven {
-        url = 'https://global.repo.jmix.io/repository/public'
-    }
     mavenLocal()
+    maven {
+        url = 'https://nexus.jmix.io/repository/public'
+    }
+    maven {
+        url = 'https://nexus.jmix.io/repository/premium'
+        credentials {
+            username = rootProject['premiumRepoUser']
+            password = rootProject['premiumRepoPass']
+        }
+    }
+
     maven {
         url 'https://maven.vaadin.com/vaadin-addons'
     }
 }
 
 dependencies {
-    implementation 'org.vaadin.addons.componentfactory:vcf-pdf-viewer:4.1.0'
+    implementation 'io.jmix.maps:jmix-maps-starter'
+    implementation 'io.jmix.maps:jmix-maps-flowui-starter'
+
+    implementation 'org.vaadin.addons.componentfactory:vcf-pdf-viewer:5.0.0'
 
     implementation 'com.company:cobalt-theme:1.0-SNAPSHOT'
 

@@ -2,8 +2,12 @@ package com.company.timesheets.view.user;
 
 import com.company.timesheets.entity.User;
 import com.company.timesheets.view.main.MainView;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.Route;
+import io.jmix.core.FileRef;
 import io.jmix.flowui.Dialogs;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.UiComponents;
@@ -16,6 +20,7 @@ import io.jmix.flowui.backgroundtask.BackgroundWorker;
 import io.jmix.flowui.backgroundtask.TaskLifeCycle;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.textarea.JmixTextArea;
+import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.model.CollectionContainer;
 import io.jmix.flowui.view.*;
@@ -46,6 +51,8 @@ public class UserListView extends StandardListView<User> {
     private Notifications notifications;
     @Autowired
     private BackgroundWorker backgroundWorker;
+    @Autowired
+    private Downloader downloader;
 
     @Subscribe("usersDataGrid.sendEmail")
     public void onUsersDataGridSendEmail(final ActionPerformedEvent event) {
@@ -100,6 +107,27 @@ public class UserListView extends StandardListView<User> {
 //                .open();
 
 
+    }
+
+    @Supply(to = "usersDataGrid.document", subject = "renderer")
+    private Renderer<User> usersDataGridDocumentRenderer() {
+        return new ComponentRenderer<>(user -> {
+            FileRef document = user.getDocument();
+            if (document == null) {
+                return new Span(""); // или new Span("-")
+            }
+
+            Span link = new Span(document.getFileName());
+            link.getElement().getStyle().set("color", "var(--lumo-primary-text-color)");
+            link.getElement().getStyle().set("cursor", "pointer");
+            link.getElement().getStyle().set("text-decoration", "underline");
+
+            link.getElement().addEventListener("click", e -> {
+                downloader.download(document);  // скачивание по FileRef
+            });
+
+            return link;
+        });
     }
 
     private class EmailTask extends BackgroundTask<Integer, Void> {

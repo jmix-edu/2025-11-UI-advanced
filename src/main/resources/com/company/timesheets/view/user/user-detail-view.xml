@@ -17,6 +17,7 @@
         <dataLoadCoordinator auto="true"/>
     </facets>
     <layout>
+        <div id="documentFrame" width="20em" height="40em" visible="false"/>
         <formLayout id="form" dataContainer="userDc">
             <textField id="usernameField" property="username" readOnly="true"/>
             <passwordField id="passwordField"
@@ -32,6 +33,7 @@
             <textField id="emailField" property="email"/>
             <comboBox id="timeZoneField" property="timeZoneId" clearButtonVisible="true"/>
             <checkbox id="activeField" property="active"/>
+            <fileStorageUploadField id="documentField" property="document"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>

@@ -39,7 +39,7 @@
         <dataGrid id="projectRolesDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="projectRolesDc">
+                  dataContainer="projectRolesDc" themeNames="column-borders row-stripes">
             <actions>
                 <action id="create" type="list_create"/>
                 <action id="edit" type="list_edit"/>
